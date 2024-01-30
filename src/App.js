@@ -20,7 +20,7 @@ const FlashcardApp = () => {
       formData.append('pdf', selectedFile);
 
       try {
-        const response = await fetch('https://binosusai.com//generate-flashcards', {
+        const response = await fetch('https://binosusai.com/generate-flashcards', {
           method: 'POST',
           body: formData,
         });
@@ -72,13 +72,15 @@ const FlashcardApp = () => {
       )}
 
       <div className="flashcard-grid">
-        <div key={currentPage} className="flashcard-box">
-          <Flashcard
-            title={flashcards[currentPage].Title}
-            front={flashcards[currentPage]["Front side"]}
-            back={flashcards[currentPage]["Back side"]}
-          />
-        </div>
+            {flashcards[currentPage] && ( // Add a check here to ensure flashcard at currentPage exists
+              <div key={currentPage} className="flashcard-box">
+                <Flashcard
+                  title={flashcards[currentPage].Title}
+                  front={flashcards[currentPage]["Front side"]}
+                  back={flashcards[currentPage]["Back side"]}
+                />
+              </div>
+            )}
       </div>
 
       <div className="pagination">
