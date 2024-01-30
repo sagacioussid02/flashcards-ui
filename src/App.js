@@ -92,6 +92,11 @@ const FlashcardApp = () => {
           Next Page
         </button>
       </div>
+
+      <footer className="footer">
+        <p>&copy; 2024 Binosus Company. All rights reserved.</p>
+        <p><a href="/privacy-policy">Privacy Policy</a></p>
+      </footer>
     </div>
   );
 };

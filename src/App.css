@@ -93,3 +93,15 @@ button:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* App.css */
+
+.footer {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #bfaeae;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
