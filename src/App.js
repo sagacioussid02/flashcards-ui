@@ -19,7 +19,7 @@ const FlashcardApp = () => {
       formData.append('pdf', selectedFile);
 
       try {
-        const response = await fetch('http://api-server-alb-1458073415.us-west-2.elb.amazonaws.com/generate-flashcards', {
+        const response = await fetch('https://binosusai.com/generate-flashcards', {
           method: 'POST',
           body: formData,
         });
