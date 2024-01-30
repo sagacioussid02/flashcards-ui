@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Flashcard from './components/Flashcard';
+import './App.css'; // Import your CSS file for styling
 
 const FlashcardApp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,7 +20,7 @@ const FlashcardApp = () => {
       formData.append('pdf', selectedFile);
 
       try {
-        const response = await fetch('https://binosusai.com/generate-flashcards', {
+        const response = await fetch('https://binosusai.com//generate-flashcards', {
           method: 'POST',
           body: formData,
         });
@@ -42,7 +43,7 @@ const FlashcardApp = () => {
     }
   };
 
-  const totalPages = Math.ceil(flashcards.length / 2);
+  const totalPages = Math.ceil(flashcards.length);
 
   useEffect(() => {
     setCurrentPage(0);
@@ -57,28 +58,30 @@ const FlashcardApp = () => {
   };
 
   return (
-    <div>
+    <div className="flashcard-container">
       <h1>Generate Flashcards</h1>
       <input type="file" accept=".pdf" onChange={handleFileChange} />
-      <button onClick={handleGenerateFlashcards} disabled={loading}>
-        Generate Flashcards
+      <button onClick={handleGenerateFlashcards} disabled={loading} className="generate-button">
+        {loading ? 'Generating...' : 'Generate Flashcards'}
       </button>
 
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="loading-container">
+          <div className="loader"></div>
+        </div>
+      )}
 
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {flashcards
-          .slice(currentPage * 2, (currentPage + 1) * 2)
-          .map((flashcard, index) => (
-            <div key={index} style={{ width: '45%', margin: '10px', padding: '15px', border: '1px solid #ccc' }}>
-              {Object.entries(flashcard).map(([title, content]) => (
-                <Flashcard key={title} title={title} content={content} />
-              ))}
-            </div>
-          ))}
+      <div className="flashcard-grid">
+        <div key={currentPage} className="flashcard-box">
+          <Flashcard
+            title={flashcards[currentPage].Title}
+            front={flashcards[currentPage]["Front side"]}
+            back={flashcards[currentPage]["Back side"]}
+          />
+        </div>
       </div>
 
-      <div>
+      <div className="pagination">
         <button onClick={handlePrevPage} disabled={currentPage === 0}>
           Previous Page
         </button>

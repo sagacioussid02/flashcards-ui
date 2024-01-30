@@ -1,21 +1,19 @@
 // Flashcard.js
-import React from 'react';
+import React, { useState } from 'react';
 
-const Flashcard = ({ content }) => {
+const Flashcard = ({ title, front, back }) => {
+  const [showFront, setShowFront] = useState(true);
+
+  const handleClick = () => {
+    setShowFront(!showFront);
+  };
+
   return (
-    <div style={flashcardStyle}>
-      <p>{content}</p>
+    <div className="flashcard" onClick={handleClick}>
+      <h3>{title}</h3>
+      {showFront ? <p>{front}</p> : <p>{back}</p>}
     </div>
   );
-};
-
-const flashcardStyle = {
-  border: '1px solid #ccc',
-  padding: '10px',
-  margin: '10px',
-  borderRadius: '8px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  backgroundColor: '#fff',
 };
 
 export default Flashcard;
