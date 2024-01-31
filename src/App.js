@@ -4,10 +4,12 @@ import './App.css'; // Import your CSS file for styling
 
 const FlashcardApp = () => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [flashcards, setFlashcards] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [error, setError] = useState(null);
+  const [userText, setUserText] = useState('');
 
 
   const handleFileChange = (event) => {
@@ -38,9 +40,15 @@ const FlashcardApp = () => {
   const handleGenerateFlashcards = async () => {
     setLoading(true);
 
-    if (selectedFile) {
+    let userText = description.trim();
+
+    if (selectedFile || userText) {
       const formData = new FormData();
-      formData.append('pdf', selectedFile);
+      if (selectedFile) {
+        formData.append('pdf', selectedFile);
+      } else {
+        formData.append('text', userText);
+      }
 
       try {
         const response = await fetch('https://binosusai.com/generate-flashcards', {
@@ -61,7 +69,7 @@ const FlashcardApp = () => {
         setLoading(false);
       }
     } else {
-      console.warn('Please select a PDF file.');
+      console.warn('Please select a PDF file or enter text.');
       setLoading(false);
     }
   };
@@ -80,16 +88,22 @@ const FlashcardApp = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  const handleTextChange = (event) => {
+    setUserText(event.target.value);
+  };
+
   return (
     <div className="flashcard-container">
       <h1>Generate Flashcards</h1>
-      <p>
+      <p className="bigger-text">
         Quickly convert your notes into flashcards for easy revision before meetings, interviews, or tests.
       </p>
       <p>
-        To get started, upload a PDF file containing your notes using the stylish "Choose File" button below.
-        Click on "Generate Flashcards" to transform your PDF into interactive flashcards. Navigate through
-        the flashcards using the "Next Page" and "Previous Page" buttons.
+        To get started, upload a PDF file containing your notes using the stylish "Choose File"
+        button below. If a PDF file is chosen, the text area will be disabled and blurred. 
+        If you prefer to input text directly, use the textarea to write your notes. 
+        Click on "Generate Flashcards" to transform your PDF or text into interactive flashcards. 
+        Navigate through the flashcards using the "Next Page" and "Previous Page" buttons.
       </p>
       <div className="file-input-container">
           <input id="fileInput" type="file" accept=".pdf" onChange={handleFileChange} />
@@ -98,6 +112,25 @@ const FlashcardApp = () => {
               Selected File: {selectedFile.name}
             </div>
           )}
+
+        <div className="partition"></div>
+
+        {selectedFile ? (
+        <textarea
+            className="blurred-textarea"
+            placeholder="Text area blurred when a file is chosen."
+            disabled
+          />
+        ) : (
+          <textarea
+            id="articlebox"
+            className="textarea-description"
+            placeholder="Write your notes here"
+            value={description}
+            rows={8}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        )}
       </div>
 
       {/* Display error message if it exists */}

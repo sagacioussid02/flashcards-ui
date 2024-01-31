@@ -198,6 +198,22 @@ button:hover {
   transform: translateY(0);
 }
 
+.partition {
+  height: 1px;
+  background-color: #ccc; /* Adjust the color as needed */
+  margin: 10px 0; /* Adjust the margin as needed */
+}
+
+.textarea-description {
+  width: 1.5 times;
+  height: double height;
+}
+
+.bigger-text {
+  font-size: 18px; /* Adjust the size as needed */
+  /* Add any other styling you desire */
+}
+
 
 @keyframes fadeIn {
   from {
