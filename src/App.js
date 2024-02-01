@@ -37,11 +37,19 @@ const FlashcardApp = () => {
     setError(null); // Clear any previous error
   };
 
+  const totalPages = flashcards ? Math.ceil(flashcards.length) : 0;
+
+
+  useEffect(() => {
+    console.log('Inside useEffect - Flashcards:', flashcards);
+    setCurrentPage(0);
+  }, [flashcards]);
+  
   const handleGenerateFlashcards = async () => {
     setLoading(true);
-
+  
     let userText = description.trim();
-
+  
     if (selectedFile || userText) {
       const formData = new FormData();
       if (selectedFile) {
@@ -49,22 +57,29 @@ const FlashcardApp = () => {
       } else {
         formData.append('text', userText);
       }
-
+  
       try {
         const response = await fetch('https://binosusai.com/generate-flashcards', {
           method: 'POST',
           body: formData,
         });
-
+  
         if (!response.ok) {
           throw new Error(`Failed to generate flashcards. Status: ${response.status}`);
         }
-
+  
         const data = await response.json();
-        setFlashcards(data.flashcards);
-        console.log('Flashcards generated:', data.flashcards);
+        console.log('Inside handleGenerateFlashcards - Flashcards:', data.flashcards);
+  
+        if (data.flashcards !== undefined) {
+          setFlashcards(data.flashcards);
+        } else {
+          // Display a funny alert to the user
+          alert("Oh no! The flashcards got lost in cyberspace. Please try again, and this time, send a virtual high-five to your notes!");
+        }
       } catch (error) {
-        console.error('Error generating flashcards:', error.message);
+        // Display a funny alert to the user
+        alert("Oops! Something went wrong in the flashcard factory. Give it another shot, and this time, wish your notes good luck!");
       } finally {
         setLoading(false);
       }
@@ -73,12 +88,9 @@ const FlashcardApp = () => {
       setLoading(false);
     }
   };
+  
 
-  const totalPages = Math.ceil(flashcards.length);
-
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [flashcards]);
+  
 
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages - 1));
@@ -147,13 +159,13 @@ const FlashcardApp = () => {
       )}
 
       <div className="flashcard-grid">
-        {flashcards[currentPage] && (
+        {flashcards && flashcards.length > 0 && (
           <div key={currentPage} className="flashcard-box">
-            <Flashcard
-              title={flashcards[currentPage].Title}
-              front={flashcards[currentPage]["Front side"]}
-              back={flashcards[currentPage]["Back side"]}
-            />
+          <Flashcard
+            title={flashcards[currentPage].Title}
+            front={flashcards[currentPage]["Front side"]}
+            back={flashcards[currentPage]["Back side"]}
+          />
           </div>
         )}
       </div>
