@@ -63,21 +63,24 @@ const FlashcardApp = () => {
           method: 'POST',
           body: formData,
         });
-  
+      
         if (!response.ok) {
           throw new Error(`Failed to generate flashcards. Status: ${response.status}`);
         }
-  
+      
         const data = await response.json();
         console.log('Inside handleGenerateFlashcards - Flashcards:', data.flashcards);
-  
-        if (data.flashcards !== undefined) {
+      
+        if (data.flashcards !== undefined && data.flashcards.length > 0) {
           setFlashcards(data.flashcards);
         } else {
           // Display a funny alert to the user
           alert("Oh no! The flashcards got lost in cyberspace. Please try again, and this time, send a virtual high-five to your notes!");
         }
       } catch (error) {
+        // Log the error for debugging
+        console.error('Error in fetch request:', error);
+      
         // Display a funny alert to the user
         alert("Oops! Something went wrong in the flashcard factory. Give it another shot, and this time, wish your notes good luck!");
       } finally {
